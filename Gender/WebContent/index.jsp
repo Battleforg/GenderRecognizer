@@ -18,18 +18,5 @@
     <br><br>
     <input type="submit" name="upload">
 </form>
-
-<script>
-    $('#send').click(function () {
-        var postData = {
-            data: 'data'
-        };
-
-        $.post('/Gender/sendImage', postData, function(data) {
-            console.log(data);
-            $('p#result').text(data);
-        });
-    });
-</script>
 </body>
 </html>
