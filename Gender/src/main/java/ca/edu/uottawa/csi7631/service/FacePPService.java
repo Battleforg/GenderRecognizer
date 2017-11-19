@@ -20,11 +20,24 @@ import javax.net.ssl.SSLException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * Service implementation class of Face++ platform
+ * 
+ * @author Yicong Li
+ */
 public class FacePPService {
 
+    // setting timeout limit
     private final static int CONNECT_TIME_OUT = 30000;
     private final static int READ_OUT_TIME = 50000;
 
+    /**
+     * public calling interface for this service
+     * 
+     * @param path
+     *            the path of the input image
+     * @return A string indicating the gender of the input image
+     */
     public String getGenderResult(String path) {
         String genderResult = "Error";
 
@@ -40,9 +53,9 @@ public class FacePPService {
                     JSONObject object = faces.getJSONObject(i);
                     if (object.keySet().contains("attributes")) {
                         genderResult = object.getJSONObject("attributes").getJSONObject("gender").getString("value");
-                    }    
+                    }
                 }
-                
+
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -52,18 +65,27 @@ public class FacePPService {
         return genderResult;
     }
 
-    public String detectImage(String path) throws Exception {
+    /**
+     * @param path
+     *            the path of the input image
+     * @return A JSON string will be returned if the detection is successful.
+     *         Otherwise, a error message string will be returned.
+     */
+    private String detectImage(String path) throws Exception {
 
+        // get input file
         File file = new File(path);
         byte[] buff = getBytesFromFile(file);
+        // set Face++ api url
         String url = "https://api-cn.faceplusplus.com/facepp/v3/detect";
         HashMap<String, String> map = new HashMap<String, String>();
         HashMap<String, byte[]> byteMap = new HashMap<String, byte[]>();
-        map.put("api_key", "CmfSxz42U34LvOi-l2vaXhCUk_QtqScN");
-        map.put("api_secret", "eBAXDTWSqfWodZ4Vnmp7KPrzLxWfm8pf");
+        map.put("api_key", "Your api_key");
+        map.put("api_secret", "Your api_secret");
         map.put("return_attributes", "gender,age,ethnicity");
         byteMap.put("image_file", buff);
         try {
+            // call sub-method to send data to Face++
             byte[] bacd = post(url, map, byteMap);
             String str = new String(bacd);
             return str;
@@ -71,9 +93,20 @@ public class FacePPService {
             e.printStackTrace();
 
         }
-        return "/";
+        return "Error";
     }
 
+    /**
+     * This method send data to Face++ api and get result string
+     * 
+     * @param url
+     *            the url of Face++ api we called
+     * @param map
+     *            http post attrbutes setting
+     * @param fileMap
+     *            the image to be posted
+     * @return result JSON string in the binary form
+     */
     protected byte[] post(String url, HashMap<String, String> map, HashMap<String, byte[]> fileMap) throws Exception {
         String boundaryString = getBoundary();
         HttpURLConnection conne;
@@ -154,6 +187,7 @@ public class FacePPService {
         return URLEncoder.encode(value, "UTF-8");
     }
 
+    // transform a file into a binary array
     private byte[] getBytesFromFile(File f) {
         if (f == null) {
             return null;
@@ -171,15 +205,6 @@ public class FacePPService {
         } catch (IOException e) {
         }
         return null;
-    }
-
-    private String getWEBINFPath() {
-        String className = FacePPService.class.getName();
-        String packageName = FacePPService.class.getPackage().getName();
-        String classFileName = className.substring(packageName.length() + 1) + ".class";
-        String classFilePath = FacePPService.class.getResource(classFileName).toString();
-        String filePath = classFilePath.substring(0, classFilePath.length() - className.length() - 14);
-        return filePath.substring(5);
     }
 
 }
