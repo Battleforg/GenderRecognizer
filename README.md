@@ -15,4 +15,6 @@ Change api_key and api_secret to your own values in the method detectImage, Face
 Remember to add Java build path entry->maven dependencies in Project->Properties->Deployment Assembly->Add before running or publishing this applicaiton.
  
 Face++ 中文文档 https://console.faceplusplus.com.cn/documents/5671787
+
+
 Face++ English documents https://console.faceplusplus.com/documents/5678948
