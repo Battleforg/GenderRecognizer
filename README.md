@@ -6,7 +6,9 @@ A image-based gender recognization application prototype.
 Development Environment:
 
 Tomcat 9.0
+
 JDK(JRE)1.8.0_144
+
 Eclipse Jave EE Oxygen
 
 
